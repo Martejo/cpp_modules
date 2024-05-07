@@ -2,11 +2,18 @@
 
 Contact::Contact()
 {
+	_isInit = false;
 }
 
 Contact::~Contact()
 {
 }
+
+
+/**
+ * std::cin.good() retourne true si aucune erreur n'est survenue lors de l'opération de saisie précédente.
+ * std::cin.clear(); : Efface les drapeaux d'erreur sur std::cin, ce qui permet de réinitialiser l'état du flux d'entrée.
+*/
 
 std::string	Contact::_getUserInput(std::string str) const
 {
@@ -35,6 +42,16 @@ std::string	Contact::_trimeContact(std::string content) const
 	return (content);
 }
 
+bool	Contact::isInitContact(void) const
+{
+	return (_isInit);
+}
+
+/**
+ * std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+ * vide le tampon d'entrée (stdin) en ignorant tous les caractères jusqu'au prochain retour à la ligne.
+*/
+
 void	Contact::initContact(void)
 {
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -43,7 +60,8 @@ void	Contact::initContact(void)
 	this->_nickName = this->_getUserInput("Please enter your nickname: ");
 	this->_phoneNumber = this->_getUserInput("Please enter your phone number: ");
 	this->_darkestSecret = this->_getUserInput("Please enter your darkest secret: ");
-	 std::cout << std::endl;
+	std::cout << std::endl;
+	this->_isInit = true;
 }
 
 void	Contact::viewContacts(int index) const

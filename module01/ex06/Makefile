@@ -1,4 +1,4 @@
-NAME	=	harlFilter
+NAME	=	HarlFilter
 
 CC		=	c++
 
@@ -26,24 +26,24 @@ UNDERLINE = \033[4m
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo -n "$(YELLOW)Compiling $(BOLD)$(NAME)...$(RESET)"
+	@echo -n "$(CYAN)Compiling $(BOLD)$(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
-	@echo "$(GREEN)\nDone.$(RESET)"
+	@echo "$(GREEN)\nDone.$(RESET)\n"
 
-%.o: %.cpp
+%.o: %.cpp Harl.hpp
 	@echo "$(CYAN)Creating object file for $<...$(RESET)"
 	@$(CC) $(CFLAGS) -I ./ -c $< -o $@
-	@echo "$(GREEN)Finished $@$(RESET)"
+	@echo "$(GREEN)Finished $@$(RESET)\n"
 
 clean:
 	@echo -n "$(RED)Cleaning object files...$(RESET)"
 	@$(RM) $(OBJ)
-	@echo "$(GREEN)\nObject files cleaned.$(RESET)"
+	@echo "$(GREEN)\nObject files cleaned.$(RESET)\n"
 
 fclean: clean
 	@echo -n "$(RED)Removing executable...$(RESET)"
 	@$(RM) $(NAME)
-	@echo "$(GREEN)\nExecutable removed.$(RESET)"
+	@echo "$(GREEN)\nExecutable removed.$(RESET)\n"
 
 re: fclean all
 

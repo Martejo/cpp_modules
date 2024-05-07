@@ -11,6 +11,7 @@ class Contact
 		std::string _nickName;
 		std::string _darkestSecret;
 		std::string _phoneNumber;
+		bool		_isInit;
 
 		std::string _getUserInput(std::string str) const;
 		std::string	_trimeContact(std::string content) const;
@@ -18,6 +19,7 @@ class Contact
 		Contact(); //Constructeur
 		~Contact(); //Destructeur
 		void	initContact(void);
+		bool	isInitContact(void) const;
 		void	viewContacts(int index) const;
 		void	printContact(int index) const;
 

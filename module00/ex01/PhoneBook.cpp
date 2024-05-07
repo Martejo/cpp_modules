@@ -2,6 +2,7 @@
 
 PhoneBook::PhoneBook()
 {
+
 }
 
 PhoneBook::~PhoneBook()
@@ -25,7 +26,10 @@ void	PhoneBook::displayPhoneBook(void) const
 {
 	std::cout << "-----PHONEBOOK CONTACTS-----" << std::endl;
 	for (int i = 0; i < 8; i++)
-		this->_contacts[i].viewContacts(i);
+	{
+		if (this->_contacts[i].isInitContact())
+			this->_contacts[i].viewContacts(i);
+	}
 	std::cout << std::endl;
 }
 
@@ -40,7 +44,7 @@ int	PhoneBook::_searchInput(void) const
 	{
 		std::cout << "Please enter the contact index: " << std::flush;
 		std::cin >> index;
-		if (std::cin.good() && (index >= 0 && index <= 7))
+		if (std::cin.good() && (index >= 0 && index < 8))
 			valid = true;
 		else
 		{

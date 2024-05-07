@@ -6,18 +6,24 @@ int	main(void)
 	std::string input = "";
 	book.welcome();
 	
-	while (input.compare("EXIT") != 0)
+	while (true) // Boucle infinie
 	{
-		if (input.compare("ADD") == 0)
+		std::cout << "> " << std::flush;
+		if (!(std::cin >> input))
+			break;
+		if (input.compare("EXIT") == 0)
+			break;
+		else if (input.compare("ADD") == 0)
 			book.addContact();
 		else if (input.compare("SEARCH") == 0)
 		{
 			book.displayPhoneBook();
 			book.searchContact();
 		}
-		std::cout << "> " << std::flush;
-		std::cin >> input;
 	}
-	
 	return (0);
 }
+
+/**
+ * std::cin récupère l'entrée standard jusqu'à ce qu'elle rencontre un espace, une tabulation ou un retour à la ligne
+*/

@@ -6,39 +6,28 @@
 int	main( void )
 {
 	ScavTrap	scav("Bernard");
-	ScavTrap	copy(scav);
+	ScavTrap	scav2;
 	ClapTrap	clap("Tapi");
-	ClapTrap	*scv_ptr = &scav;
 
-	std::cout << "\n" << std::endl;
+	std::cout << "\nScav" << std::endl;
 	scav.print();
-	copy.print();
-	clap.print();
 
-	std::cout << "\n!-------- ScavTrap Loop Constructor/destrucor order --------!" << std::endl;
-	for (int i = 0; i < 4; i++)
-	{
-		std::cout << "\n" << std::endl;
-		ScavTrap	loop("loop");
-		loop.print();
-	}
-
-	std::cout << "\n!-------- ClapTrap Functions working on ScavTrap --------!" << std::endl;
 	std::cout << "\n" << std::endl;
+	for(int i = 0; i < 6; i++)
+		scav.attack("Tapi");
 	scav.beRepaired(1);
-
-	std::cout << "\n" << std::endl;
-	copy.takeDamage(1);
-
-	std::cout << "\n!-------- ScavTrap own attack Functions / Working on ScavTrap pointer initialized with ClapTrap --------!" << std::endl;
-	std::cout << "\n" << std::endl;
-	scav.attack("Bernard");
-	clap.attack("Bernard");
-	scv_ptr->attack("Tapi");
-
-	std::cout << "\n!-------- ScavTrap highFivesGuys Functions  --------!" << std::endl;
-	std::cout << "\n" << std::endl;
 	scav.guardGate();
+	
+	std::cout << "\nClap" << std::endl;
+	clap.print();
 	std::cout << "\n" << std::endl;
+	clap.attack("Bernard");
+
+	std::cout << "\n" << std::endl;
+	scav2.print();
+	scav2.guardGate();
+	scav2.takeDamage(10);
+	std::cout << "\n" << std::endl;
+
 	return (0);
 }

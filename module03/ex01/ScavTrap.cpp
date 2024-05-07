@@ -1,11 +1,20 @@
 #include "ScavTrap.hpp"
 
-ScavTrap::ScavTrap( std::string name ): ClapTrap(name)
+
+ScavTrap::ScavTrap(): ClapTrap()
 {
 	this->_attackDamage = 20;
 	this->_hitPoints = 100;
 	this->_energyPoints = 50;
 	std::cout << "Default ScavTrap constructor called" << std::endl;
+}
+
+ScavTrap::ScavTrap( std::string name ): ClapTrap(name)
+{
+	this->_attackDamage = 20;
+	this->_hitPoints = 100;
+	this->_energyPoints = 50;
+	std::cout << "ScavTrap constructor called" << std::endl;
 }
 
 ScavTrap::ScavTrap( ScavTrap &copy ): ClapTrap(copy)
@@ -23,6 +32,7 @@ void	ScavTrap::attack( const std::string &target )
 	{
 		std::cout << "ScavTrap " << _Name << " attacks " << target
 			<< ", causing " << _attackDamage << " points of damage!" << std::endl;
+		this->_energyPoints -= 10;
 	}
 }
 

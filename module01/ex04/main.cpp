@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/19 09:58:31 by gemartel          #+#    #+#             */
+/*   Updated: 2024/04/19 14:35:08 by gemartel         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fstream>  // Pour std::ifstream
 #include <iostream> // Pour std::cerr
 #include <sstream>  // Pour std::stringstream
@@ -40,31 +52,30 @@ int main(int ac, char *av[])
 
 	// Ouvrir le fichier en mode lecture
 	std::ifstream infile(av[1]);
-
-	// Vérifier si le fichier a été ouvert correctement
-	if (!infile.is_open()) {
+	if (!infile.is_open())
+	{
 		std::cout << "Error: " << av[1] << ":" 
 		<< " infile can't be opened" << std::endl;
-		return 1;
+		return (1);
 	}
 
-	// Utiliser un stringstream pour lire le contenu du fichier
-	std::stringstream buffer;
-	buffer << infile.rdbuf(); // Transférer tout le contenu du fichier dans le buffer
-	infile.close();
-
-	// Creer le nom du nouveau fichier
 	std::string newFileName = std::string(av[1]) + ".replace";
 
-	// acceder a la const char * contenue dans le type std::string car std::ofstream ne contient pas de constructeur(std::string&)
+	//Creer et Ouvrir le fichier en mode ecriture
+	//c_str renvoie un ptr de type const char requis par ofstream
 	std::ofstream outfile(newFileName.c_str());
-	if (!outfile.is_open()) {
+	if (!outfile.is_open())
+	{
 		std::cout << "Error: " << newFileName << ":" 
 		<< " outfile can't be opened or created" << std::endl;
-		return 1;
+		return (1);
 	}
-	outfile << ft_sed(buffer.str(), av[2], av[3]);
+
+	std::string line;
+	while (std::getline(infile, line))
+		outfile << ft_sed(line, av[2], av[3]) << std::endl;
+	
+	infile.close();
 	outfile.close();
-	// Le programme se termine avec succès
-	return 0;
+	return (0);
 }

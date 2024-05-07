@@ -4,6 +4,10 @@ CC		=	c++
 
 CFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
+INCLUDES =	header.hpp \
+			Contact.hpp \
+			PhoneBook.hpp \
+
 SRCS	=	main.cpp \
 			PhoneBook.cpp \
 			Contact.cpp \
@@ -30,7 +34,7 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 	@echo "$(GREEN)\nDone.$(RESET)"
 
-%.o: %.cpp
+%.o: %.cpp  $(INCLUDES)
 	@echo "$(CYAN)Creating object file for $<...$(RESET)"
 	@$(CC) $(CFLAGS) -I ./ -c $< -o $@
 	@echo "$(GREEN)Finished $@$(RESET)"

@@ -3,23 +3,29 @@
 int	main( void )
 {
 	ClapTrap	clap("Bernard");
-	ClapTrap	copy(clap);
-	ClapTrap	assigned = copy;
+	ClapTrap	trap;
 
 	std::cout << "\n" << std::endl;
 	clap.print();
-	copy.print();
-	assigned.print();
+	trap.print();
 
 	std::cout << "\n" << std::endl;
+	
 	for (int i = 0; i < 11; i++)
 		clap.beRepaired(1);
+
 	std::cout << "\n" << std::endl;
+	
 	for (int i = 0; i < 11; i++)
-		copy.takeDamage(1);
+		trap.takeDamage(1);
+	
 	std::cout << "\n" << std::endl;
-	clap.attack("Bernard");
-	assigned.attack("Bernard");
+	
+	clap.attack("Morty");
+	trap.attack("Bernard");
+	trap.beRepaired(1);
+
 	std::cout << "\n" << std::endl;
+	
 	return (0);
 }

@@ -16,8 +16,10 @@ public:
 	Fixed(const Fixed& source);
 	~Fixed();
 
+	//setter/getter
 	int getRawBits( void ) const;
 	void setRawBits( int const raw );
+	
 	Fixed& operator=(const Fixed& source);
 
 	int	toInt(void) const;

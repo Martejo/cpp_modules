@@ -6,7 +6,7 @@
 class PhoneBook
 {
 	private:
-		Contact	_contacts[7];
+		Contact	_contacts[8];
 		int		_numberOfContacts;
 		int		_searchInput(void) const;
 	

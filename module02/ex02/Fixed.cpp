@@ -18,14 +18,18 @@ Fixed::Fixed(const Fixed& source)
 	*this = source;
 }
 
+//constructeur 
 Fixed::Fixed(const int value)
 {
 	this->_fixedNbr = value << _fixedBits;
+	std::cout << "fix int" << std::endl; 
 }
 
+//constructeur 
 Fixed::Fixed(const float value)
 {
 	this->_fixedNbr = roundf(value * (1 << _fixedBits));
+	std::cout << "fixnbr " << this->_fixedNbr << std::endl;
 }
 
 int Fixed::getRawBits( void ) const
@@ -46,6 +50,7 @@ int Fixed::toInt( void ) const
 
 float Fixed::toFloat( void )const
 {
+	std::cout << _fixedNbr << "fff"  << std::endl;
 	return ((float)this->_fixedNbr / (1 << _fixedBits));
 }
 
@@ -126,9 +131,7 @@ Fixed	Fixed::operator-( const Fixed &a) const
 Fixed	Fixed::operator*( const Fixed &a) const
 {
 	Fixed result;
-
-	result =this->toFloat()* a.toFloat();
-	//result.setRawBits(a.getRawBits() * this->getRawBits());
+	result = this->toFloat()* a.toFloat();
 	return (result);
 }
 
@@ -137,7 +140,6 @@ Fixed	Fixed::operator/( const Fixed &a) const
 	Fixed result;
 
 	result = this->toFloat() / a.toFloat();
-	//result.setRawBits(a.getRawBits() / this->getRawBits());
 	return (result);
 }
 
