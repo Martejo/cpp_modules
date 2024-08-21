@@ -30,6 +30,21 @@ Bureaucrat::~Bureaucrat()
     std::cout << "Bureaucrat Destructor called : " << *this << std::endl;
 }
 
+void    Bureaucrat::signForm(Form &form)   const
+{
+    try
+    {
+        form.beSigned(*this);
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << _name << " couldn’t sign " << form.getName() \
+		<< " because " << e.what() << "." << std::endl;
+    }
+    std::cout << _name << " signed " << form.getName() << "." << std::endl;
+}
+
+
 std::string const   Bureaucrat::getName() const
 {
     return (_name);
@@ -43,9 +58,9 @@ unsigned int    Bureaucrat::getGrade() const
 void    Bureaucrat::validateGrade(unsigned int new_grade)
 {
     if (new_grade < 1)
-        throw Bureaucrat::GradeTooHighException();
-    else if (new_grade > 150)
         throw Bureaucrat::GradeTooLowException();
+    else if (new_grade > 150)
+        throw Bureaucrat::GradeTooHighException();
     _grade = new_grade;
 }
 

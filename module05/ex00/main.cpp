@@ -28,60 +28,62 @@ int main()
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
     
-    // std::cout << "\n-------TEST OPERATORS----------\n" << std::endl;
+    std::cout << "\n-------TEST OPERATORS----------\n" << std::endl;
 
-    // Bureaucrat d("Daft Punk", 150);
-    // Bureaucrat d2("Avicii", 112);
-    // d2 = d;
-    // d2.announce();
+    Bureaucrat d("Daft Punk", 150);
+    Bureaucrat d2("Avicii", 112);
+    d2 = d;
+    std::cout << d2 << std::endl;
 
-    // std::cout << "\n-------TEST INCREMENT AND DECREMENT----------\n" << std::endl;
 
-    // std::cout << "\n-------MODIF GRADE TOO LOW----------\n" << std::endl;
-    // try {
-    //     std::cout << "Before trying decrement : " << d << std::endl;
-    //     d.decrementGrade();
-    // } 
+    std::cout << "\n-------TEST INCREMENT AND DECREMENT----------\n" << std::endl;
+
+    std::cout << "\n-------MODIF GRADE TOO LOW----------\n" << std::endl;
+
+    try {
+        std::cout << "Before trying decrement : " << d << std::endl;
+        d.decrementGrade();
+    } 
     
-    // catch (const std::exception& e) {
-    //     std::cerr << "Exception caught: decrement failed :" << e.what() << std::endl;
-    // } 
-    // std::cout << "After trying decrement : " << d << std::endl;
+    catch (const std::exception& e) {
+        std::cerr << "Exception caught: decrement failed :" << e.what() << std::endl;
+    } 
+    std::cout << "After trying decrement : " << d << std::endl;
 
-    // std::cout << "\n-------MODIF GRADE TOO HIGH----------\n" << std::endl;
+    std::cout << "\n-------MODIF GRADE TOO HIGH----------\n" << std::endl;
     
-    // d.setGrade(1);
-    // try {
-    //     std::cout << "Before trying increment : " << d << std::endl;
-    //     d.incrementGrade();
-    // }
-    // catch (const std::exception& e) {
-    //     std::cerr << "Exception caught: increment failed :" << e.what() << std::endl;
-    // } 
-    // std::cout << "After trying increment : " << d << std::endl;
+    d.validateGrade(1);
+    try {
+        std::cout << "Before trying increment : " << d << std::endl;
+        d.incrementGrade();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Exception caught: increment failed :" << e.what() << std::endl;
+    } 
+    std::cout << "After trying increment : " << d << std::endl;
 
-    // std::cout << "\n-------MODIF GRADE OK----------\n" << std::endl;
+    std::cout << "\n-------MODIF GRADE OK----------\n" << std::endl;
     
-    // d.setGrade(100);
-    // try {
-    //     std::cout << "Before trying decrement : " << d << std::endl;
-    //     d.decrementGrade();
-    // } 
-    // catch (const std::exception& e) {
-    //     std::cerr << "Exception caught: decrement failed : " << e.what() << std::endl;
-    // } 
-    // std::cout << "After trying decrement : " << d << std::endl;
+    d.validateGrade(100);
+    try {
+        std::cout << "Before trying decrement : " << d << std::endl;
+        d.decrementGrade();
+    } 
+    catch (const std::exception& e) {
+        std::cerr << "Exception caught: decrement failed : " << e.what() << std::endl;
+    } 
+    std::cout << "After trying decrement : " << d << std::endl;
 
-    // try {
-    //     std::cout << "Before trying increment : " << d << std::endl;
-    //     d.incrementGrade();
-    // }
-    // catch (const std::exception& e) {
-    //     std::cerr << "Exception caught: increment failed : " << e.what() << std::endl;
-    // } 
-    // std::cout << "After trying increment : " << d << std::endl;
+    try {
+        std::cout << "Before trying increment : " << d << std::endl;
+        d.incrementGrade();
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Exception caught: increment failed : " << e.what() << std::endl;
+    } 
+    std::cout << "After trying increment : " << d << std::endl;
      
-    // std::cout << "\n-------PROGRAM END----------\n" << std::endl;
+    std::cout << "\n-------PROGRAM END----------\n" << std::endl;
 
     return 0;
 }
