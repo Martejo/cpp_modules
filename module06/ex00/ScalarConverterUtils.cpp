@@ -10,16 +10,6 @@ void ScalarConverter::detectImpossibleConversion(const std::string &literal)
 		return;
 	}
 
-	// Vérifier si '+' ou '-' est en début de chaîne
-	if ((literal[0] == '+' || literal[0] == '-') && literal.size() > 1) {
-		std::string::size_type i;
-		for (i = 1; i < literal.size(); ++i) {
-			if (literal[i] == '+' || literal[i] == '-') {
-				throw ScalarConverter::ImpossibleConversionException();
-			}
-		}
-	}
-
 	bool point_found = false;
 	std::string::size_type i;
 	for (i = 0; i < literal.size(); ++i) {
@@ -48,11 +38,24 @@ void ScalarConverter::detectImpossibleConversion(const std::string &literal)
 	if (literal.find('f') != std::string::npos && literal[literal.size() - 1] != 'f') {
 		throw ScalarConverter::ImpossibleConversionException();
 	}
+	// Si un '+' est présent mais pas en première position
+	std::size_t lastPlus = literal.rfind('+');
+	if (lastPlus != std::string::npos && lastPlus != 0) {
+		throw ScalarConverter::ImpossibleConversionException();
+	}
+	// Si un '-' est présent mais pas en première position
+	std::size_t lastMinus = literal.rfind('-');
+	if (lastMinus != std::string::npos && lastMinus != 0) {
+		throw ScalarConverter::ImpossibleConversionException();
+	}
+
+	
 }
 
 void ScalarConverter::detectOverflow(const std::string &literal) 
     {
-        std::strtod(literal.c_str(), NULL);
+        errno = 0;
+		std::strtod(literal.c_str(), NULL);
         if (errno == ERANGE)
             throw ScalarConverter::OverflowException();
     }

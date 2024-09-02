@@ -12,6 +12,9 @@ void ScalarConverter::convert(const std::string& literal)
         ScalarConverter::convertToChar(literal);
 }
 
+/*les conversions de style C++ sont vérifiées par le compilateur.
+Les conversions de style C ne le sont pas et peuvent échouer au moment de l'exécution.*/
+
 bool ScalarConverter::charDetected(const std::string &literal)
 {
 	bool	is_char = (literal.length() == 1 && !std::isdigit(literal[0]));
@@ -47,6 +50,8 @@ void ScalarConverter::convertToFloat(const std::string &literal)
 	std::stringstream ss(literal);
 	float floatValue;
 	if (ss >> floatValue) {
+		// std::fixed = indication de format (le nb ne doit pas etre affiche en notation exposant)
+		// std::setprecision = indication de format (on definit le nb de chiffres apres la virgule des nb float et double a afficher) 
 		std::cout << std::fixed << std::setprecision(ScalarConverter::choosePrecision(literal));
 		std::cout << "float: " << floatValue << "f" << std::endl;
 	} else {

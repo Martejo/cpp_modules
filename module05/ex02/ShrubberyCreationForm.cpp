@@ -1,7 +1,7 @@
 #include "ShrubberyCreationForm.hpp"
 #include <fstream>
 
-ShrubberyCreationForm::ShrubberyCreationForm(const std::string name, const std::string target): AForm(name, 145, 137), _target(target)
+ShrubberyCreationForm::ShrubberyCreationForm(const std::string target): AForm("Shrubbery", 145, 137), _target(target)
 {
 	std::cout << "ShrubberyCreationForm Default constructor called : " << *this << std::endl;
 }
@@ -30,21 +30,22 @@ void ShrubberyCreationForm::generateFile() const
 	std::ofstream flux(new_filename.c_str());
 	if (!flux)
 		throw std::runtime_error("Failed to open file: " + new_filename);
-	
-	flux << "               ,@@@@@@@," << std::endl;
-	flux << "       ,,,.   ,@@@@@@/@@,  .oo8888o." << std::endl;
-	flux << "    ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o" << std::endl;
-	flux << "   ,%&%&&%&&%,@@@\\@@@/@@@88\\88888/88'" << std::endl;
-	flux << "   %&&%&%&/%&&%@@\\@@/ /@@@88888\\88888'" << std::endl;
-	flux << "   %&&%/ %&%%&&@@\\ V /@@' `88\\8 `/88'" << std::endl;
-	flux << "   `&%\\ ` /%&'    |.|        \\ '|8'" << std::endl;
-	flux << "       |o|        | |         | |" << std::endl;
-	flux << "       |.|        | |         | |" << std::endl;
-	flux << "    \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_" << std::endl;
+
+	flux << "      /\\      " << std::endl;
+	flux << "     /\\*\\     " << std::endl;
+	flux << "    /\\O\\*\\    " << std::endl;
+	flux << "   /*/\\/\\/\\   " << std::endl;
+	flux << "  /\\O\\/\\*\\/\\  " << std::endl;
+	flux << " /\\*\\/\\*\\/\\/\\ " << std::endl;
+	flux << "/\\O\\/\\/*/\\/O/\\" << std::endl;
+	flux << "      ||      " << std::endl;
+	flux << "      ||      " << std::endl;
+	flux << "      ||      " << std::endl;
 
 	if (!flux)
 		throw std::runtime_error("Failed to write to file: " + new_filename);
 	flux.close();
+
 }
 
 void ShrubberyCreationForm::execute(const Bureaucrat& executor) const

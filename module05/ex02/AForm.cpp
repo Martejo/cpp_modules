@@ -1,17 +1,17 @@
 # include "AForm.hpp"
 
-AForm::AForm(const std::string name, const unsigned int gradeSign, const unsigned int gradeExec)
-: _name(name), _isSigned(false), _gradeSign(gradeSign), _gradeExec(gradeExec)
+AForm::AForm(const std::string name, const int gradeSign, const int gradeExec)
+: _name(name), _isSigned(false), _gradeToSign(gradeSign), _gradeToExec(gradeExec)
 {
-	if (_gradeSign < 1 || _gradeExec < 1)
+	if (_gradeToSign < 1 || _gradeToExec < 1)
 		throw (GradeTooHighException());
-	else if (_gradeSign > 150 || _gradeExec > 150)
+	else if (_gradeToSign > 150 || _gradeToExec > 150)
 		throw (GradeTooLowException());
 	std::cout << "AForm Default constructor called : " << *this << std::endl;
 }
 
 AForm::AForm(const AForm& toCopy)
-:_name(toCopy.getName()), _isSigned(toCopy.getSigned()), _gradeSign(toCopy.getSignGrade()), _gradeExec(toCopy.getExecGrade())
+:_name(toCopy.getName()), _isSigned(toCopy.getSigned()), _gradeToSign(toCopy.getSignGrade()), _gradeToExec(toCopy.getExecGrade())
 {
 	std::cout << "AForm Copy constructor called : " << *this << std::endl;
 }
@@ -49,19 +49,19 @@ bool AForm::getSigned() const
 	return (_isSigned);
 }
 
-unsigned int AForm::getSignGrade() const
+int AForm::getSignGrade() const
 {
-	return (_gradeSign);
+	return (_gradeToSign);
 }
 
-unsigned int AForm::getExecGrade() const
+int AForm::getExecGrade() const
 {
-	return (_gradeExec);
+	return (_gradeToExec);
 }
 
 void AForm::beExecuted(const Bureaucrat& bureaucrat) const
 {
-	if (bureaucrat.getGrade() > _gradeExec)
+	if (bureaucrat.getGrade() > _gradeToExec)
 		throw AForm::GradeTooLowException();
 	else if (!_isSigned)
 		throw AForm::SignatureException();
@@ -69,7 +69,7 @@ void AForm::beExecuted(const Bureaucrat& bureaucrat) const
 
 void AForm::beSigned(const Bureaucrat& bureaucrat)
 {
-	if (bureaucrat.getGrade() <= _gradeSign)
+	if (bureaucrat.getGrade() <= _gradeToSign)
 		_isSigned = true;
 	else
 		throw GradeTooLowException();

@@ -1,6 +1,6 @@
 #include "PresidentialPardonForm.hpp"
 
-PresidentialPardonForm::PresidentialPardonForm(const std::string name, const std::string target): AForm(name, 25, 5), _target(target)
+PresidentialPardonForm::PresidentialPardonForm(const std::string target): AForm("Zaphod Beeblebrox", 25, 5), _target(target)
 {
 	std::cout << "PresidentialPardonForm Default constructor called : " << *this << std::endl;
 }
@@ -27,11 +27,11 @@ void PresidentialPardonForm::execute(const Bureaucrat& executor) const
 {
 	try{
 		AForm::beExecuted(executor);
+		std::cout << _target << " has been pardoned by President" << std::endl;
 	}
 	catch(std::exception& e){
 		throw;
-	}
-	std::cout << _target << " has been pardoned by President" << std::endl;
+	}	
 }
 
 const std::string PresidentialPardonForm::getTarget() const

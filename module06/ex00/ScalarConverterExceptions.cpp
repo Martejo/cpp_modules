@@ -8,5 +8,6 @@ const char*	ScalarConverter::OverflowException::what( void ) const throw()
 
 const char*	ScalarConverter::ImpossibleConversionException::what( void ) const throw()
 {
-	return ("Error: The conversion is impossible, the input don't match with any of this types {char, int, float, double}");
+    return ("Error: The conversion is impossible, the input doesn't match with any of this types {char, int, float, double}");
 }
+

@@ -1,18 +1,16 @@
-NAME		= Forms
+NAME		= span
 
 CC			= c++
 
-CFLAGS		= -std=c++98 -g3 -Wall -Wextra -Werror -Wshadow 
+CFLAGS		= -std=c++98 -g3 -Wall -Wextra -Werror
 
 SRC_FILES 	=	main.cpp \
-				Bureaucrat.cpp \
-				Form.cpp \
+				Span.cpp \
 
 OBJ			= $(SRC_FILES:.cpp=.o)
 
-INC 		=	Bureaucrat.hpp \
-				Form.hpp \
-
+INC 		=	Span.hpp \
+				
 
 %.o   : %.cpp $(INC)
 	${CC} ${CFLAGS} -c $< -o $@ -I.

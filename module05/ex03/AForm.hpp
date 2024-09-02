@@ -13,11 +13,11 @@ class AForm
 	private:
 		const std::string	_name;
 		bool				_isSigned;
-		const unsigned int	_gradeSign;
-		const unsigned int	_gradeExec;
+		const int	_gradeToSign;
+		const int	_gradeToExec;
 
 	public:
-		AForm(const std::string name, const unsigned int gradeSign, const unsigned int gradeExec);
+		AForm(const std::string name, const int gradeSign, const int gradeExec);
 		AForm(const AForm& toCopy);
 		AForm& operator=(AForm& a);
 		virtual ~AForm();
@@ -25,8 +25,8 @@ class AForm
 		//Getter
 		const std::string getName() const;
 		bool getSigned() const;
-		unsigned int getSignGrade() const;
-		unsigned int getExecGrade() const;
+		int getSignGrade() const;
+		int getExecGrade() const;
 
 		//Method
 		void beSigned(const Bureaucrat& bureaucrat);

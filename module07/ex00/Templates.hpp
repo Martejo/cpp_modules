@@ -1,4 +1,5 @@
-#pragma once //Remplace ifndef define endif
+#ifndef TEMPLATES_HPP
+#define TEMPLATES_HPP
 
 template <typename T>
 const T& max(const T& v1, const T& v2)
@@ -21,7 +22,7 @@ void swap(T& v1, T& v2)
 }
 
 
-
+#endif
 
 /*
 Pourquoi utiliser des templates ?

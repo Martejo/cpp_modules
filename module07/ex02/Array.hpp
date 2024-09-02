@@ -16,7 +16,7 @@ class Array
 
 		Array(unsigned int n) : _size(n)
 		{
-			_data = new T[n]; // Initialisation avec la valeur par défaut de T
+			_data = new T[n](); // Initialisation avec la valeur par défaut de T
 		}
 
 		Array(const Array& other) : _size(other._size)

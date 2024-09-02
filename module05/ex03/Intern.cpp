@@ -24,43 +24,57 @@ Intern& Intern::operator=(Intern& other)
 	return(other);
 }
 
-unsigned int Intern::getFormIndex(std::string f_name) const
+AForm* Intern::createRobotomyRequestForm(const std::string& target) const
 {
-	std::string forms[3] = 
-	{"robotomy request",
-	"shrubbery creation",
-	"presidential pardon"
-	};
-	for (size_t i = 0; i < f_name.length(); i++)
-		f_name[i] = std::tolower(f_name[i]);
-	for (int i = 0; i < 3; i++)
-		if (forms[i] == f_name)
-			return (i);
-	return (-1);
+	return (new RobotomyRequestForm(target));
 }
 
-AForm	*Intern::makeForm(std::string f_name, const std::string target) const
+AForm* Intern::createShrubberyCreationForm(const std::string& target) const
 {
-	AForm *new_form = NULL;
+	return (new ShrubberyCreationForm(target));
+}
 
-	switch(getFormIndex(f_name))
+AForm* Intern::createPresidentialPardonForm(const std::string& target) const
+{
+	return (new PresidentialPardonForm(target));
+}
+
+/*
+ Tableau de pointeurs vers des fonctions membres
+ Syntaxe : 
+ <Type de retour> (<Classe>::*<Nom du pointur>[<Taille du tableau>])(<Paramètres>) const
+
+ Exemple concret dans notre cas :
+ AForm* (Intern::*formCreationMethods[3])(const std::string& target) const
+
+ Explication :
+ - `AForm*` : Type de retour de la fonction membre (un pointeur vers un objet de type AForm).
+ - `Intern::` : La fonction membre appartient à la classe Intern.
+ - `*formCreationMethods[3]` : Nom du tableau (formCreationMethods) qui contient 3 pointeurs.
+ - `(const std::string& target) const` : Signature de la fonction membre, prenant un std::string en paramètre et étant const.
+*/
+
+AForm	*Intern::makeForm(const std::string f_name, const std::string target) const
+{
+	std::string formNames[3] = {"robotomy request", "shrubbery creation", "presidential pardon"};
+
+	// Tableau de pointeurs de fonctions membres qui retournent un pointeur de AForm
+	AForm* (Intern::*formCreationMethods[3])(const std::string& target) const = 
 	{
-		case ROBOTOMY_REQUEST:
-            new_form = new RobotomyRequestForm(f_name, target);
-            std::cout << "Intern creates " << f_name << std::endl;
-            break;
-        case SHRUBBERY_CREATION:
-            new_form = new ShrubberyCreationForm(f_name, target);
-            std::cout << "Intern creates " << f_name << std::endl;
-            break;
-        case PRESIDENTIAL_PARDON:
-            new_form = new PresidentialPardonForm(f_name, target);
-            std::cout << "Intern creates " << f_name << std::endl;
-            break;
-        default:
-            throw Intern::BadFormNameException();
-    }
-	return (new_form);
+		&Intern::createRobotomyRequestForm,
+		&Intern::createShrubberyCreationForm,
+		&Intern::createPresidentialPardonForm
+	};
+
+	for (int i = 0; i < 3; i++) {
+		if (f_name == formNames[i]) {
+			std::cout << "Intern creates " << formNames[i] << std::endl;
+			return (this->*formCreationMethods[i])(target);
+		}
+	}
+
+	throw Intern::BadFormNameException();
+	return (NULL);
 }
 
 const char *Intern::BadFormNameException::what() const throw()

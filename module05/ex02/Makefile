@@ -1,4 +1,4 @@
-NAME		= sign_exec_forms
+NAME		= Sign_exec_forms
 
 CC			= c++
 

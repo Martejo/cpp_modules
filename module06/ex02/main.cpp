@@ -7,6 +7,17 @@
 #include "B.hpp"
 #include "C.hpp"
 
+// Codes ANSI pour les couleurs
+#define RESET   "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+#define BLUE    "\033[34m"
+#define MAGENTA "\033[35m"
+#define CYAN    "\033[36m"
+#define WHITE   "\033[37m"
+
+
 /*
 dynamic_cast est un opérateur de conversion de type utilisé principalement pour le cast (conversion de type) 
 en temps d'exécution, surtout dans le contexte des hiérarchies de classes polymorphes.
@@ -65,47 +76,74 @@ void identify(Base* p)
 
 	else if(dynamic_cast<C*>(p))
 		std::cout << "C identified" << std::endl;
+	else 
+		std::cout << "Unkniwn type" << std::endl;
 }
 
 /*
 	le dynamic_cast d'une référence (plutôt que d'un pointeur) peut lever une exception si le cast échoue
 	(void)ptr sert a rm les alertes de compilation
 */
+
+
 void identify(Base& p)
 {
-	try {
-        (void)dynamic_cast<A&>(p);
+    if (dynamic_cast<A*>(&p)) {
         std::cout << "A identified" << std::endl;
-    }
-    catch (const std::exception&) {}
-
-    try {
-        (void)dynamic_cast<B&>(p);
+    } else if (dynamic_cast<B*>(&p)) {
         std::cout << "B identified" << std::endl;
-    }
-    catch (const std::exception&) {}
-
-    try {
-        (void)dynamic_cast<C&>(p);
+    } else if (dynamic_cast<C*>(&p)) {
         std::cout << "C identified" << std::endl;
+    } else {
+        std::cout << "Unknown type" << std::endl;
     }
-    catch (const std::exception&) {}
 }
 
 
-int main()
-{
-	Base *ptr;
+void printHeader(int testNumber) {
+    std::cout << CYAN << "\n\n --------------- TEST " << testNumber << " --------------" << RESET << std::endl;
+}
 
-	for (int i = 0; i < 5; i++)
-	{
-        std::cout << "\n\n --------------- TEST "<< i + 1 << " --------------" << std::endl;
-		ptr = generate();
-		std::cout << "find class type by pointer => ";
-		identify(ptr);
-		std::cout << "find class type by reference => ";
-		identify(*ptr);
-		delete ptr;
-	}
-	return(0);
+void printIdentificationResult(const std::string& method, const std::string& type) {
+    std::cout << YELLOW << method << " => " << GREEN << type << RESET << std::endl;
+}
+
+int main() {
+    Base *ptr;
+
+    for (int i = 0; i < 5; i++) {
+        printHeader(i + 1);
+
+        ptr = generate();
+
+        std::cout << BLUE << "Identifying class type by pointer: " << RESET;
+        identify(ptr);
+
+        std::cout << BLUE << "Identifying class type by reference: " << RESET;
+        identify(*ptr);
+
+        delete ptr;
+    }
+
+	 // Test supplémentaire : identification d'un pointeur nul
+    printHeader(6);
+    std::cout << RED << "Testing with nullptr" << RESET << std::endl;
+
+    ptr = NULL;
+
+    try {
+        std::cout << BLUE << "Identifying class type by pointer: " << RESET;
+        identify(ptr);  // Ce test devrait échouer ou afficher un résultat spécifique
+    } catch (...) {
+        std::cout << RED << "Exception caught while identifying a nullptr" << RESET << std::endl;
+    }
+
+    try {
+        std::cout << BLUE << "Identifying class type by reference: " << RESET;
+        identify(*ptr);  // Ce test lancera une exception car on déréférence un pointeur nul
+    } catch (...) {
+        std::cout << RED << "Exception caught while identifying a nullptr reference" << RESET << std::endl;
+    }
+
+    return 0;
 }

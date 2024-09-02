@@ -12,21 +12,21 @@ class Bureaucrat
 {
 	private:
 		std::string const	_name;
-		unsigned int		_grade;
+		int					_grade;
 	
 	public:
 		Bureaucrat();
-		Bureaucrat(std::string const name, unsigned int grade);
+		Bureaucrat(std::string const name, int grade);
 		Bureaucrat(const Bureaucrat& toCopy);
 		Bureaucrat &operator=(const Bureaucrat& a);
 		~Bureaucrat();
 
 		//Getter
 		std::string const getName() const;
-		unsigned int getGrade() const;
+		int getGrade() const;
 
 		//Methode
-		void validateGrade(unsigned int new_grade);
+		void validateGrade(int new_grade);
 		void decrementGrade();
 		void incrementGrade();
 		void signForm(AForm& form) const;

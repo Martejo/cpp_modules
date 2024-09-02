@@ -13,19 +13,19 @@ class Form
 	private:
 		const std::string	_name;
 		bool				_isSigned;
-		const unsigned int	_gradeSign;
-		const unsigned int	_gradeExec;
+		const int			_gradeToSign;
+		const int			_gradeToExec;
 	
 	public:
-		Form(const std::string name, const unsigned int gradeSign, const unsigned int gradeExec);
+		Form(const std::string name, const int gradeSign, const int gradeExec);
 		Form(const Form& toCopy);
 		Form& operator=(Form& a);
 		~Form();
 
 		const std::string	getName()	const;
 		bool				getSigned()	const;
-		unsigned int		getSignGrade()	const;
-		unsigned int		getExecGrade()	const;
+		int					getSignGrade()	const;
+		int					getExecGrade()	const;
 
 		void	beSigned(const Bureaucrat& bureaucrat);
 

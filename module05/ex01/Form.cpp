@@ -1,16 +1,16 @@
 #include "Form.hpp"
 
-Form::Form(const std::string name, const unsigned int gradeSign, const unsigned int gradeExec):_name(name), _isSigned(false), _gradeSign(gradeSign), _gradeExec(gradeExec)
+Form::Form(const std::string name, const int gradeSign, const int gradeExec):_name(name), _isSigned(false), _gradeToSign(gradeSign), _gradeToExec(gradeExec)
 {
-	if (_gradeSign < 1 || _gradeExec < 1)
+	if (_gradeToSign < 1 || _gradeToExec < 1)
 		throw (GradeTooHighException());
-	else if (_gradeSign > 150 || _gradeExec > 150)
+	else if (_gradeToSign > 150 || _gradeToExec > 150)
 		throw (GradeTooLowException());
 	std::cout << "Form default constructor called : " << *this << std::endl;
 }
 
 Form::Form(const Form& toCopy)
-: _name(toCopy.getName()), _isSigned(toCopy.getSigned()), _gradeSign(toCopy.getSignGrade()), _gradeExec(toCopy.getExecGrade())
+: _name(toCopy.getName()), _isSigned(toCopy.getSigned()), _gradeToSign(toCopy.getSignGrade()), _gradeToExec(toCopy.getExecGrade())
 {
 	std::cout << "Form copy constructor called : " << *this << std::endl;
 }
@@ -48,19 +48,19 @@ bool	Form::getSigned()	const
 	return (_isSigned);
 }
 
-unsigned int	Form::getSignGrade()	const
+int	Form::getSignGrade()	const
 {
-	return (_gradeSign);
+	return (_gradeToSign);
 }
 
-unsigned int	Form::getExecGrade()	const
+int	Form::getExecGrade()	const
 {
-	return (_gradeExec);
+	return (_gradeToExec);
 }
 
 void	Form::beSigned(const Bureaucrat& bureaucrat)
 {
-	if (bureaucrat.getGrade() <= _gradeSign)
+	if (bureaucrat.getGrade() <= _gradeToSign)
 		_isSigned = true;
 	else
 		throw GradeTooLowException();

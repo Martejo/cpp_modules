@@ -2,8 +2,12 @@
 #include <iostream>
 #include "iter.hpp"
 
- template< typename T >
- void print( T const & x ) { std::cout << x << std::endl; return; }
+template< typename T >
+void print( T const & x )
+{
+	std::cout << x << std::endl;
+	return;
+}
 
 int	main( void )
 {
@@ -21,7 +25,7 @@ int	main( void )
 		std::cout << std::endl;
 	}
 	{
-		std::cout << "---- TEST DOUBLE ----___\n" << std::endl;
+		std::cout << "---- TEST DOUBLE ----\n" << std::endl;
 		double table[8] = {1.25, 2.25, 3.45, 4.43, 5.45, 6.34, 7.77, 8.65};
 
 		::iter<double>(table, 8, print<double>);
