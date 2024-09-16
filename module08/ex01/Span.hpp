@@ -1,8 +1,11 @@
-#pragma once
+#ifndef SPAN_HPP
+#define SPAN_HPP
+
 #include <vector>
 #include <iostream>
 #include <algorithm>
 #include <exception>
+#include <limits>
 
 /*
 	std::array est une version statique de std::vector, où la taille du tableau est définie à la compilation. 
@@ -35,20 +38,21 @@ class Span
 	~Span();
 	Span	&operator=( const Span& a );
 
-	void	addNumber(const int &nb);
-	void	addItRange(std::vector<int>::iterator itBegin, std::vector<int>::iterator itEnd, std::vector<int>& container); 
-	bool	isValidRange(std::vector<int>::iterator itBegin, std::vector<int>::iterator itEnd, std::vector<int>& container);
-
+	void	addNumber(int nb);
+	// Méthode template pour ajouter une plage d'itérateurs
+	template <typename InputIterator>
+	void addItRange(InputIterator itBegin, InputIterator itEnd);
+	
 	unsigned int	shortestSpan( void ) const;
 	unsigned int	longestSpan( void ) const;
 	std::vector<int>	getIntVector( void ) const;
 
-	class MaxSizeExeption: public std::exception {
+	class MaxSizeException: public std::exception {
 		public:
 			const char *what() const throw();
 	};
 
-	class SpanExeption: public std::exception {
+	class SpanException: public std::exception {
 		public:
 			const char *what() const throw();
 	};
@@ -56,3 +60,12 @@ class Span
 };
 
 std::ostream 	&operator<<( std::ostream &flux, const Span &span );
+template <typename InputIterator>
+void Span::addItRange(InputIterator itBegin, InputIterator itEnd)
+{
+	for (; itBegin != itEnd; ++itBegin) {
+		addNumber(*itBegin);
+	}
+}
+
+#endif

@@ -1,176 +1,111 @@
-#include <algorithm>
-#include <vector>
-#include <list>
-#include <iostream>
-#include <iterator>
-#include <stdexcept>
-#include <type_traits>
+#include "PmergeMe.hpp"
 
-template<typename Container>
-Container getIntegerSequence(char *av[]) {
-    Container container;
-    int i = 1;
-    char *ptr;
-    while (av[i]) {
-        int val = std::strtol(av[i], &ptr, 10);
-        if (*ptr != '\0' || val < 0) {
-            throw std::runtime_error("Error");
-        }
-        container.push_back(val);
-        i++;
+// Fonction pour vérifier si la chaîne d'entrée est un unsigned int valide
+bool isValidUnsignedInt(const std::string& str) {
+    if (str.empty() || (!isdigit(str[0]) && str[0] != '+')) return false;
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (!isdigit(str[i])) return false;
     }
-    return container;
+    return true;
 }
 
-template<typename Container>
-std::vector<std::pair<typename Container::value_type, typename Container::value_type>> createAndSortPairs(Container& container) {
-    std::vector<std::pair<typename Container::value_type, typename Container::value_type>> containerPair;
-    typename Container::iterator it = container.begin();
-    while (it != container.end()) {
-        typename Container::value_type first = *it;
-        ++it;
-        if (it != container.end()) {
-            typename Container::value_type second = *it;
-            containerPair.push_back(std::make_pair(first, second));
-            if (containerPair.back().first < containerPair.back().second) {
-                std::swap(containerPair.back().first, containerPair.back().second);
-            }
-            ++it;
-        }
+
+unsigned int    getInputArgs(char *arg)
+{
+    if (!isValidUnsignedInt(arg)) {
+        std::cerr << "Error: Invalid input '" << arg << "'. Negative numbers are not allowed." << std::endl;
+        throw (std::exception());
     }
-    return containerPair;
+    unsigned long ulValue = std::strtoul(arg, NULL, 10);
+    if (ulValue > UINT_MAX) {
+        std::cerr << "Error: Input '" << arg << "' is out of range for unsigned int." << std::endl;
+        throw (std::exception());
+    }
+    return (static_cast<unsigned int>(ulValue));
 }
 
-template<typename Container>
-void merge(std::vector<std::pair<typename Container::value_type, typename Container::value_type>>& array, int begin, int mid, int end) {
-    typedef std::pair<typename Container::value_type, typename Container::value_type> PairType;
-    std::vector<PairType> leftArray(array.begin() + begin, array.begin() + mid + 1);
-    std::vector<PairType> rightArray(array.begin() + mid + 1, array.begin() + end + 1);
-
-    size_t leftIndex = 0, rightIndex = 0, mergedIndex = begin;
-
-    while (leftIndex < leftArray.size() && rightIndex < rightArray.size()) {
-        if (leftArray[leftIndex].first <= rightArray[rightIndex].first) {
-            array[mergedIndex++] = leftArray[leftIndex++];
-        } else {
-            array[mergedIndex++] = rightArray[rightIndex++];
-        }
-    }
-    while (leftIndex < leftArray.size()) {
-        array[mergedIndex++] = leftArray[leftIndex++];
-    }
-    while (rightIndex < rightArray.size()) {
-        array[mergedIndex++] = rightArray[rightIndex++];
-    }
-}
-
-template<typename Container>
-void mergeSort(std::vector<std::pair<typename Container::value_type, typename Container::value_type>>& array, int begin, int end) {
-    if (begin >= end) return;
-    int mid = begin + (end - begin) / 2;
-    merge<Container>(array, begin, mid, end);
-}
-
-template<typename Container>
-void createMainChainAndPend(std::vector<std::pair<typename Container::value_type, typename Container::value_type>>& containerPair,
-                            Container& mainChain, Container& pend) {
-    if (!containerPair.empty()) {
-        mainChain.push_back(containerPair[0].second);
-        for (size_t i = 0; i < containerPair.size(); ++i) {
-            mainChain.push_back(containerPair[i].first);
-            if (i > 0) {
-                pend.push_back(containerPair[i].second);
-            }
-        }
-    }
-}
-
-template<typename Container>
-std::vector<int> generateJacobsthal(int n) {
-    std::vector<int> jacobSequence;
-    int a = 0, b = 1;
-    while (jacobSequence.size() < static_cast<size_t>(n)) {
-        jacobSequence.push_back(a);
-        int next = a + 2 * b;
-        a = b;
-        b = next;
-    }
-    return jacobSequence;
-}
-
-template<typename Container>
-void insertToMainChain(Container& mainChain, Container& pend, std::vector<int>& positions) {
-    size_t addedCount = 0;
-    for (size_t i = 0; i < positions.size(); ++i) {
-        typename Container::iterator pendIt = pend.begin();
-        std::advance(pendIt, positions[i] - 1);
-
-        typename Container::value_type target = *pendIt;
-
-        // Trouver la position d'insertion pour la liste
-        typename Container::iterator insertPos = mainChain.begin();
-        size_t pos = positions[i] + addedCount;
-        std::advance(insertPos, pos);
-
-        mainChain.insert(insertPos, target);
-        addedCount++;
-    }
-}
-
-int main(int argc, char *argv[]) {
-    try {
-        if (argc < 2) {
-            std::cerr << "Usage: " << argv[0] << " [numbers...]" << std::endl;
-            return 1;
-        }
-
-        // Tester avec std::vector<int>
-        std::vector<int> vec = getIntegerSequence<std::vector<int> >(argv);
-        std::cout << "Testing with std::vector<int>:" << std::endl;
-        if (vec.size() == 1) {
-            std::cout << vec.front() << std::endl;
-        } else {
-            std::vector<std::pair<int, int> > vecPair = createAndSortPairs(vec);
-            mergeSort<std::vector<int> >(vecPair, 0, vecPair.size() - 1);
-
-            std::vector<int> mainChain;
-            std::vector<int> pend;
-            createMainChainAndPend<std::vector<int> >(vecPair, mainChain, pend);
-
-            std::vector<int> jacobSequence = generateJacobsthal<std::vector<int> >(pend.size());
-            insertToMainChain<std::vector<int> >(mainChain, pend, jacobSequence);
-
-            for (std::vector<int>::iterator it = mainChain.begin(); it != mainChain.end(); ++it) {
-                std::cout << *it << " ";
-            }
-            std::cout << std::endl;
-        }
-
-        // Tester avec std::list<int>
-        std::list<int> lst = getIntegerSequence<std::list<int> >(argv);
-        std::cout << "Testing with std::list<int>:" << std::endl;
-        if (lst.size() == 1) {
-            std::cout << lst.front() << std::endl;
-        } else {
-            std::vector<std::pair<int, int> > lstPair = createAndSortPairs(lst);
-            mergeSort<std::list<int> >(lstPair, 0, lstPair.size() - 1);
-
-            std::list<int> mainChain;
-            std::list<int> pend;
-            createMainChainAndPend<std::list<int> >(lstPair, mainChain, pend);
-
-            std::vector<int> jacobSequence = generateJacobsthal<std::list<int> >(pend.size());
-            insertToMainChain<std::list<int> >(mainChain, pend, jacobSequence);
-
-            for (std::list<int>::iterator it = mainChain.begin(); it != mainChain.end(); ++it) {
-                std::cout << *it << " ";
-            }
-            std::cout << std::endl;
-        }
-
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cerr << "Error: Please provide at least one number as argument." << std::endl;
         return 1;
+    }
+
+
+    //ECRITURE DE BEFORE ET AFTER SANS PRISE EN COMPTE DU TEMPS
+    {
+        std::vector<unsigned int> vContainer;
+        unsigned int value;
+        for (int i = 1; i < argc; ++i) {
+            try{
+                value = getInputArgs(argv[i]);
+            }catch(std::exception & e){ 
+                std::cerr << "Error" << std::endl;
+            }
+            vContainer.push_back(static_cast<unsigned int>(value));
+        }
+        std::cout << "Before: ";
+        printVector(vContainer);
+
+        fordJohnsonSort(vContainer);
+
+        std::cout << "After: ";
+        printVector(vContainer);
+    }
+
+
+    //TIME VECTOR
+    /*
+        Plus rapide pour cette operation car l'acces aux valeurs internes est optimise dans std::vector ce qui dans notre cas est important
+        On peut d'ailleurs utiliser l'operateur[] pour acceder aux index
+    */
+    {
+        clock_t vStart = clock();
+        std::vector<unsigned int> vContainer;
+        for (int i = 1; i < argc; ++i) {
+            if (!isValidUnsignedInt(argv[i])) {
+                std::cerr << "Error: Invalid input '" << argv[i] << "'. Negative numbers are not allowed." << std::endl;
+                return 1;
+            }
+            unsigned long ulValue = std::strtoul(argv[i], NULL, 10);
+            if (ulValue > UINT_MAX) {
+                std::cerr << "Error: Input '" << argv[i] << "' is out of range for unsigned int." << std::endl;
+                return 1;
+            }
+            vContainer.push_back(static_cast<unsigned int>(ulValue));
+        }
+
+        fordJohnsonSort(vContainer);
+        clock_t vEnd = clock();
+        double vDuration = static_cast<double>(vEnd - vStart) / CLOCKS_PER_SEC * 1e6;
+
+        std::cout << "Time to process a range of " << vContainer.size() << " elements with std::vector : " << vDuration << " us" << std::endl;
+    }
+    
+
+    //UTILISATION DE LA LISTE
+    /* 
+        Plus long pour cette operation car l'acces aux valeurs internes est plus long que pour std::vector ce qui dans notre cas est important
+        On ne peut d' ailleurs pas utiliser l' operateur[] et on est obliges de passer par des iterateurs
+    */
+    {
+        clock_t lStart = clock();
+        std::list<unsigned int> lContainer;
+        for (int i = 1; i < argc; ++i) {
+            if (!isValidUnsignedInt(argv[i])) {
+                std::cerr << "Error: Invalid input '" << argv[i] << "'. Negative numbers are not allowed." << std::endl;
+                return 1;
+            }
+            unsigned long ulValue = std::strtoul(argv[i], NULL, 10);
+            if (ulValue > UINT_MAX) {
+                std::cerr << "Error: Input '" << argv[i] << "' is out of range for unsigned int." << std::endl;
+                return 1;
+            }
+            lContainer.push_back(static_cast<unsigned int>(ulValue));
+        }
+        fordJohnsonSort(lContainer);
+        clock_t lEnd = clock();
+        double lDuration = static_cast<double>(lEnd - lStart) / CLOCKS_PER_SEC * 1000000;
+        std::cout << "Time to process a range of " << lContainer.size() << " elements with std::list : " << lDuration << " us" << std::endl;
     }
 
     return 0;
