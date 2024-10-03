@@ -1,41 +1,22 @@
-NAME		= ford
+NAME = PmergeMe
 
-CC			= c++
+CC = g++
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-CFLAGS		= -std=c++98 -g3 -Wall -Wextra -Werror
-
-SRC_FILES 	=	main.cpp \
-				  \
-
-OBJ			= $(SRC_FILES:.cpp=.o)
-
-INC 		=	RPN.hpp \
-				
-
-%.o   : %.cpp $(INC)
-	${CC} ${CFLAGS} -c $< -o $@ -I.
+SRC = main.cpp PmergeMe.cpp
+OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo -n Compiling executable $(NAME)...
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
-	@echo Done.
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ)
 
 clean:
-	@echo -n Making clean...
-	@rm -rf $(OBJ)
-	@echo Done.
+	rm -f $(OBJ)
 
 fclean: clean
-	@echo -n Making fclean...
-	@rm -f $(NAME)
-	@echo Done.
-
-test: re
-	./$(NAME)
-	@make fclean
+	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY : all clean fclean re test
+.PHONY: all clean fclean re

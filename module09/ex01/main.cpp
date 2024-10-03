@@ -1,18 +1,14 @@
 #include "RPN.hpp"
 
-void rpnAnalysisFormat(const std::string &av)
+void rpnCheckFormat(const std::string &av)
 {
     std::istringstream rpn(av);
-    std::istream_iterator<std::string> begin(rpn);
-    std::istream_iterator<std::string> end;
+    std::string value;
 
-    while (begin != end)
+    while (rpn >> value)
     {
-        std::string value = *begin;
-        // Vérifie si la taille est 1 et que ce n'est pas un chiffre ou un opérateur
         if (value.size() > 1 || (!isdigit(value[0]) && value != "+" && value != "-" && value != "*" && value != "/"))
             throw(std::exception());
-        ++begin;
     }
 }
 
@@ -20,13 +16,14 @@ int main(int argc, char **argv)
 {
     if (argc != 2)
     {
-        std::cerr << RED << BOLD << "This RPN program accepts only one argument in inverted Polish notation." << RESET << std::endl;
+        std::cerr << BOLD << RED << "Error: This program need 1 argument\n Usage: ./RPN <string in rpn>" << RESET << std::endl;
         return (1);
     }
     try{
-        rpnAnalysisFormat(argv[1]);
+        rpnCheckFormat(argv[1]);
         rpnProcess(argv[1]);
     }catch(std::exception &e){
-        std::cerr << "Erreur" << std::endl;
+        std::cerr << BOLD << RED << "Erreur" << RESET << std::endl;
     }
+    return(0);
 }

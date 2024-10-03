@@ -1,15 +1,15 @@
-NAME		= RPN
+NAME		= btc
 
 CC			= c++
 
 CFLAGS		= -std=c++98 -g3 -Wall -Wextra -Werror
 
 SRC_FILES 	=	main.cpp \
-				RPN.cpp \
+				BitcoinExchange.cpp\
 
 OBJ			= $(SRC_FILES:.cpp=.o)
 
-INC 		=	RPN.hpp \
+INC 		=	BitcoinExchange.hpp\
 				
 
 %.o   : %.cpp $(INC)

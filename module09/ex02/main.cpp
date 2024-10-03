@@ -1,111 +1,93 @@
 #include "PmergeMe.hpp"
+#include <sys/time.h>
 
-// Fonction pour vérifier si la chaîne d'entrée est un unsigned int valide
-bool isValidUnsignedInt(const std::string& str) {
-    if (str.empty() || (!isdigit(str[0]) && str[0] != '+')) return false;
-    for (size_t i = 0; i < str.size(); ++i) {
-        if (!isdigit(str[i])) return false;
+template <typename Container>
+bool isSorted(const Container& data) {
+    typename Container::const_iterator it = data.begin();
+    if (it == data.end())
+        return true; // Conteneur vide est considéré comme trié
+    typename Container::const_iterator next_it = it;
+    ++next_it;
+    while (next_it != data.end()) {
+        if (*next_it < *it)
+            return false; // Trouvé un élément hors de l'ordre
+        ++it;
+        ++next_it;
     }
-    return true;
+    return true; // Le conteneur est trié
 }
 
-
-unsigned int    getInputArgs(char *arg)
+int main(int argc, char *argv[])
 {
-    if (!isValidUnsignedInt(arg)) {
-        std::cerr << "Error: Invalid input '" << arg << "'. Negative numbers are not allowed." << std::endl;
-        throw (std::exception());
-    }
-    unsigned long ulValue = std::strtoul(arg, NULL, 10);
-    if (ulValue > UINT_MAX) {
-        std::cerr << "Error: Input '" << arg << "' is out of range for unsigned int." << std::endl;
-        throw (std::exception());
-    }
-    return (static_cast<unsigned int>(ulValue));
-}
-
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cerr << "Error: Please provide at least one number as argument." << std::endl;
+    if (argc < 2)
+    {
+        std::cerr << "Erreur: veuillez fournir une séquence d'entiers positifs en arguments." << std::endl;
         return 1;
     }
 
-
-    //ECRITURE DE BEFORE ET AFTER SANS PRISE EN COMPTE DU TEMPS
+    // Récupération des entiers depuis les arguments
+    std::vector<int> dataVector;
+    std::deque<int> dataDeque;
+    for (int i = 1; i < argc; ++i)
     {
-        std::vector<unsigned int> vContainer;
-        unsigned int value;
-        for (int i = 1; i < argc; ++i) {
-            try{
-                value = getInputArgs(argv[i]);
-            }catch(std::exception & e){ 
-                std::cerr << "Error" << std::endl;
+        std::string arg = argv[i];
+        for (size_t j = 0; j < arg.length(); ++j)
+        {
+            if (!isdigit(arg[j]))
+            {
+                std::cerr << "Erreur: tous les arguments doivent être des entiers positifs." << std::endl;
+                return 1;
             }
-            vContainer.push_back(static_cast<unsigned int>(value));
         }
-        std::cout << "Before: ";
-        printVector(vContainer);
-
-        fordJohnsonSort(vContainer);
-
-        std::cout << "After: ";
-        printVector(vContainer);
+        int value = std::atoi(argv[i]);
+        if (value < 0)
+        {
+            std::cerr << "Erreur: tous les arguments doivent être des entiers positifs." << std::endl;
+            return 1;
+        }
+        dataVector.push_back(value);
+        dataDeque.push_back(value);
     }
 
-
-    //TIME VECTOR
-    /*
-        Plus rapide pour cette operation car l'acces aux valeurs internes est optimise dans std::vector ce qui dans notre cas est important
-        On peut d'ailleurs utiliser l'operateur[] pour acceder aux index
-    */
+    // Affichage de la séquence non triée
+    std::cout << "Before: ";
+    for (size_t i = 0; i < dataVector.size(); ++i)
     {
-        clock_t vStart = clock();
-        std::vector<unsigned int> vContainer;
-        for (int i = 1; i < argc; ++i) {
-            if (!isValidUnsignedInt(argv[i])) {
-                std::cerr << "Error: Invalid input '" << argv[i] << "'. Negative numbers are not allowed." << std::endl;
-                return 1;
-            }
-            unsigned long ulValue = std::strtoul(argv[i], NULL, 10);
-            if (ulValue > UINT_MAX) {
-                std::cerr << "Error: Input '" << argv[i] << "' is out of range for unsigned int." << std::endl;
-                return 1;
-            }
-            vContainer.push_back(static_cast<unsigned int>(ulValue));
-        }
-
-        fordJohnsonSort(vContainer);
-        clock_t vEnd = clock();
-        double vDuration = static_cast<double>(vEnd - vStart) / CLOCKS_PER_SEC * 1e6;
-
-        std::cout << "Time to process a range of " << vContainer.size() << " elements with std::vector : " << vDuration << " us" << std::endl;
+        std::cout << dataVector[i] << " ";
     }
-    
+    std::cout << std::endl;
 
-    //UTILISATION DE LA LISTE
-    /* 
-        Plus long pour cette operation car l'acces aux valeurs internes est plus long que pour std::vector ce qui dans notre cas est important
-        On ne peut d' ailleurs pas utiliser l' operateur[] et on est obliges de passer par des iterateurs
-    */
+    // Tri avec std::vector
+    PmergeMe sorter;
+
+    clock_t vStart = clock();
+    sorter.sortVector(dataVector);
+    clock_t vEnd = clock();
+	double vDuration = (static_cast<double>(vEnd) - static_cast<double>(vStart)) / static_cast<double>(CLOCKS_PER_SEC) * 1000.0;
+	std::cout << "Time to process a range of " << dataVector.size() << " elements with std::vector : " << vDuration << " ms" << std::endl;
+
+
+    // Tri avec std::deque
+    clock_t dStart = clock();
+    sorter.sortDeque(dataDeque);
+    clock_t dEnd = clock();
+	double dDuration = (static_cast<double>(dEnd) - static_cast<double>(dStart)) / static_cast<double>(CLOCKS_PER_SEC) * 1000.0;
+    std::cout << "Time to process a range of " << dataDeque.size() << " elements with std::deque  : " << dDuration << " ms" << std::endl;
+
+
+    // Affichage de la séquence triée
+    std::cout << "After: ";
+    for (size_t i = 0; i < dataVector.size(); ++i)
     {
-        clock_t lStart = clock();
-        std::list<unsigned int> lContainer;
-        for (int i = 1; i < argc; ++i) {
-            if (!isValidUnsignedInt(argv[i])) {
-                std::cerr << "Error: Invalid input '" << argv[i] << "'. Negative numbers are not allowed." << std::endl;
-                return 1;
-            }
-            unsigned long ulValue = std::strtoul(argv[i], NULL, 10);
-            if (ulValue > UINT_MAX) {
-                std::cerr << "Error: Input '" << argv[i] << "' is out of range for unsigned int." << std::endl;
-                return 1;
-            }
-            lContainer.push_back(static_cast<unsigned int>(ulValue));
-        }
-        fordJohnsonSort(lContainer);
-        clock_t lEnd = clock();
-        double lDuration = static_cast<double>(lEnd - lStart) / CLOCKS_PER_SEC * 1000000;
-        std::cout << "Time to process a range of " << lContainer.size() << " elements with std::list : " << lDuration << " us" << std::endl;
+        std::cout << dataVector[i] << " ";
+    }
+    std::cout << std::endl;
+
+    // Vérification si le vecteur est trié
+    if (isSorted(dataVector)) {
+        std::cout << "Le vecteur est bien trié." << std::endl;
+    } else {
+        std::cout << "Le vecteur n'est pas trié." << std::endl;
     }
 
     return 0;

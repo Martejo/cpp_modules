@@ -1,8 +1,14 @@
 #include "RPN.hpp"
 
-bool ifOperator(const char &value)
+bool isOperator(const char &value)
 {
     return (value == '+' || value == '-' || value == '/' || value == '*');
+}
+
+void    detectBufferOverflow(double result)
+{
+    if (result > static_cast<double>(INT_MAX) || result < static_cast<double>(INT_MIN))
+            throw(std::exception());
 }
 
 int calculateValues(int &a, int &b, char &sign)
@@ -20,9 +26,8 @@ int calculateValues(int &a, int &b, char &sign)
             throw(std::exception()); // Impossible de diviser par 0
         result = static_cast<double>(a) / static_cast<double>(b);
     }
-    // std::cout << std::fixed << INT_MAX << "  " << result << std::endl;//
-    if (result > static_cast<double>(INT_MAX) || result < static_cast<double>(INT_MIN))
-            throw(std::exception()); // Overflow ou underflow
+    try{detectBufferOverflow(result);}
+    catch(std::exception& e){throw(std::exception());}
 
     return (static_cast<int>(result));
 }
@@ -30,39 +35,37 @@ int calculateValues(int &a, int &b, char &sign)
 void rpnProcess(const std::string &av)
 {
     std::istringstream rpn(av);
-    std::istream_iterator<std::string> begin(rpn);
-    std::istream_iterator<std::string> end;
+    std::string value;
     std::stack<int> stack;
 
-    while (begin != end)
+    while (rpn >> value)
     {
-        std::string value = *begin;
 
         if (isdigit(value[0]))
             stack.push(std::atoi(value.c_str()));
-        else if (ifOperator((char)value[0]))
+        else if (isOperator(static_cast<char>(value[0])))
         {
             if (stack.size() < 2)
                 throw std::exception();
 
-            int b = stack.top();
-            stack.pop();
-            int a = stack.top();
-            stack.pop();
+            //extract the 2 digits at the top of the stack
+            int b = stack.top();stack.pop();
+            int a = stack.top();stack.pop();
             
-            // Effectuer l'opération et pousser le résultat sur la pile
             try{
+                //can return an exception for instance if the calculation leads to an overflow or DIV/0
                 int result = calculateValues(a, b, value[0]);
+                //push the result on the stack
                 stack.push(result);
             }
             catch(std::exception &e){
                 throw std::exception();
             }
         }
-        ++begin;
     }
+    //Error : nb of operands doesn't match nb of operators
     if (stack.size() != 1)
         throw std::exception();
+    //display the result
     std::cout << stack.top() << std::endl;
 }
-
